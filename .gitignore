@@ -1,0 +1,18 @@
+# Artifacts
+art
+
+# Environment
+*.env
+
+# JetBrains
+.idea
+
+# Secure Socket Layer
+ssl
+
+# Source control
+.git
+
+# Visual Studio Code
+.vscode
+
