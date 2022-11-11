@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  postgres:
+    profiles:
+      - "development"
+      - "staging"
+      - "production"
+    image: "postgres:15.1-alpine3.16"
+    container_name: "postgres"
+    hostname: "postgres"
+    restart: "unless-stopped"
+    networks:
+      - "erebus"
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: "pg_isready -U $POSTGRES_USER"
+      interval: "5s"
+      timeout: "60s"
+      retries: 5
+    environment:
+      TZ: "${TZ}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - type: "volume"
+        source: "postgres-data"
+        target: "/var/lib/postgresql/data"
+        read_only: false
+
+networks:
+  erebus:
+    name: "erebus"
+    driver: "bridge"
+    driver_opts:
+      com.docker.network.bridge.name: "br0"
+
+volumes:
+  postgres-data:
+    name: "postgres-data"
+    driver: "local"
