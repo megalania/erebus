@@ -51,3 +51,12 @@ go/build:
 .PHONY: go/run
 go/run:
 	go run -ldflags=$(FLAGS) -v .
+
+# ----------------------------------------------------------------------------------------------------------- protobuf #
+.PHONY: protobuf/generate
+protobuf/generate:
+	protoc --go_out=. \
+		   --go_opt=paths=source_relative \
+		   --go-grpc_out=. \
+		   --go-grpc_opt=paths=source_relative \
+		   pkg/proto/*/*.proto
