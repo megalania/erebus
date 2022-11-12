@@ -12,11 +12,14 @@
     # -------------------------------------------------------------------------------------------------------- General #
     TZ="< UNIX timezone >"
 
+    # -------------------------------------------------------------------------------------------------------------- Nginx #
+    NGINX_SERVER_NAME="< Domain name >"
+
     # ------------------------------------------------------------------------------------------------------- Postgres #
     POSTGRES_USER="< Postgres username >"
     POSTGRES_PASSWORD="< Postgres password >"
     POSTGRES_HOST="postgres"
-    POSTGRES_PORT="5432"
+    POSTGRES_PORT=5432
     POSTGRES_DB="erebus"
     ```
 
