@@ -8,6 +8,8 @@ import (
 	"syscall"
 
 	"google.golang.org/grpc"
+
+	"github.com/megalania/erebus/pkg/proto/agent"
 )
 
 func Run(addr string) error {
@@ -20,8 +22,12 @@ func Run(addr string) error {
 	if err != nil {
 		return nil
 	}
+
 	var opts []grpc.ServerOption
 	server := grpc.NewServer(opts...)
+	ag := AgentServer{}
+	agent.RegisterAgentServer(server, &ag)
+
 	cha := make(chan error)
 	go func() {
 		cha <- server.Serve(lis)
