@@ -1,6 +1,59 @@
 version: "3.9"
 
 services:
+  erebus:
+    profiles:
+      - "staging"
+      - "production"
+    image: "erebus:latest"
+    container_name: "erebus"
+    hostname: "erebus"
+    restart: "unless-stopped"
+    networks:
+      - "erebus"
+    expose:
+      - "8080"
+    command:
+      - "erebus"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8080"
+    environment:
+      TZ: "${TZ}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_HOST: "${POSTGRES_HOST}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+
+  nginx:
+    profiles:
+      - "staging"
+      - "production"
+    image: "nginx:1.23.2-alpine"
+    container_name: "nginx"
+    hostname: "nginx"
+    restart: "unless-stopped"
+    depends_on:
+      - "erebus"
+    networks:
+      - "erebus"
+    ports:
+      - "80:80"
+    environment:
+      TZ: "${TZ}"
+      NGINX_SERVER_NAME: "${NGINX_SERVER_NAME}"
+    volumes:
+      - type: "bind"
+        source: "./nginx"
+        target: "/etc/nginx/templates"
+        read_only: true
+      - type: "volume"
+        source: "nginx-log"
+        target: "/var/log/nginx/${NGINX_SERVER_NAME}"
+        read_only: false
+
   postgres:
     profiles:
       - "development"
@@ -39,4 +92,8 @@ networks:
 volumes:
   postgres-data:
     name: "postgres-data"
+    driver: "local"
+
+  nginx-log:
+    name: "nginx-log"
     driver: "local"
