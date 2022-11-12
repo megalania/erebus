@@ -2,22 +2,37 @@ package server
 
 import (
 	"context"
-	"log"
 
+	"google.golang.org/protobuf/types/known/timestamppb"
+
+	"github.com/megalania/erebus/pkg/database"
 	"github.com/megalania/erebus/pkg/proto/agent"
 )
 
 type AgentServer struct {
 	agent.UnimplementedAgentServer
+	Service *database.AgentService
 }
 
 func (a *AgentServer) ReadSingle(ctx context.Context, input *agent.ReadSingleRequest) (*agent.AgentResponse, error) {
-	log.Printf("Agent ID: %v", input.Id)
+	agt, err := a.Service.SelectSingle(
+		ctx,
+		input.Id,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	c := timestamppb.New(agt.CreatedAt)
+	u := timestamppb.New(agt.UpdatedAt)
+
 	item := agent.AgentItem{
-		Id: input.Id,
+		Id:        agt.ID,
+		CreatedAt: c,
+		UpdatedAt: u,
 	}
 	resp := agent.AgentResponse{
-		Item: &item,
+		Agent: &item,
 	}
 	return &resp, nil
 }

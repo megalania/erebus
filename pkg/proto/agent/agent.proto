@@ -8,12 +8,13 @@ option go_package = "github.com/megalania/erebus/pkg/proto/agent";
 
 message AgentItem {
   string id = 1;
+  // TODO: maybe it will be better to format this as strings instead.
   google.protobuf.Timestamp createdAt = 2;
   google.protobuf.Timestamp updatedAt = 3;
 }
 
 message AgentResponse {
-  AgentItem item = 1;
+  AgentItem agent = 1;
 }
 
 message ReadSingleRequest {
