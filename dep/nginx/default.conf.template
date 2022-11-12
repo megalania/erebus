@@ -1,0 +1,24 @@
+upstream erebus {
+    server erebus:8080;
+}
+
+server {
+    listen 80 http2;
+    listen [::]:80 http2;
+    server_name $NGINX_SERVER_NAME;
+
+    access_log /var/log/nginx/$NGINX_SERVER_NAME/access.log;
+    error_log /var/log/nginx/$NGINX_SERVER_NAME/error.log;
+
+    location / {
+        proxy_set_header    Connection          $http_connection;
+        proxy_set_header    Host                $http_host;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto   $scheme;
+        proxy_set_header    X-Real-IP           $realip_remote_addr;
+
+        proxy_redirect off;
+
+        grpc_pass grpc://erebus;
+    }
+}
