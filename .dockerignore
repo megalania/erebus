@@ -1,0 +1,41 @@
+# Archive.
+arc
+*.tar.gz
+*.tgz
+
+# Continuous Integration.
+.github
+
+# Docker.
+.dockerignore
+dep
+docker-compose.yaml
+Dockerfile
+
+# Environment.
+*.env
+
+# Helm.
+.helmignore
+
+# JetBrains.
+.idea
+
+# Make.
+Makefile
+
+# Markdown.
+*.md
+
+# Secure Socket Layer.
+ssl
+
+# Source control.
+.git
+.gitignore
+
+# Test.
+test
+
+# Visual Studio Code.
+.vscode
